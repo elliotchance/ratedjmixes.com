@@ -31,7 +31,7 @@ func handleMyMixes(db *sqlx.DB, w http.ResponseWriter, req *http.Request) error 
 	for _, mix := range mixes {
 		fmt.Fprintf(w, "<tr>\n")
 		fmt.Fprintf(w, "<td>%s</td>\n", mix.ArtistName)
-		fmt.Fprintf(w, "<td>%s</td>\n", mix.Title)
+		fmt.Fprintf(w, `<td><a href="/mix/%s">%s</a></td>\n`, mix.TlID, mix.Title)
 		fmt.Fprintf(w, "<td>%s</td>\n", mix.Date[:10])
 		fmt.Fprintf(w, "<td>%s</td>\n", mix.RatingString())
 		fmt.Fprintf(w, "</tr>\n")

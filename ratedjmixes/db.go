@@ -14,6 +14,8 @@ CREATE TABLE IF NOT EXISTS artist (
 	artist_id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name TEXT,
 	tl_id TEXT
+
+	-- links, last_updated
 );
 
 CREATE TABLE IF NOT EXISTS track (
@@ -21,7 +23,11 @@ CREATE TABLE IF NOT EXISTS track (
 	title TEXT,
 	artist_id INTEGER NOT NULL,
 	tl_id TEXT
+
+	-- label, links?, last_updated
 );
+
+-- SOURCE
 
 CREATE TABLE IF NOT EXISTS tracklist (
 	tracklist_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -31,6 +37,9 @@ CREATE TABLE IF NOT EXISTS tracklist (
 	date DATE,
 	episode INT,
 	UNIQUE(tl_id)
+
+	-- track_total, tracks_id, genres, duration, duration_estimate, shortlink?
+	-- media links, source, image, last_updated
 );
 
 CREATE TABLE IF NOT EXISTS tracklist_track (
@@ -38,6 +47,8 @@ CREATE TABLE IF NOT EXISTS tracklist_track (
 	track_id INTEGER NOT NULL,
 	number INTEGER NOT NULL,
 	UNIQUE(tracklist_id, number, track_id)
+
+	-- time_code
 );
 
 CREATE TABLE IF NOT EXISTS users (
@@ -54,12 +65,13 @@ CREATE TABLE IF NOT EXISTS tracklist_collection (
 	tracklist_id INTEGER NOT NULL,
 	rating SMALLINT,
 	UNIQUE(user_id, tracklist_id)
+
+	-- calculated_rating/score, notes, tags
 );
 
--- DELETE FROM artist;
--- DELETE FROM track;
--- DELETE FROM tracklist;
--- DELETE FROM tracklist_collection;
+-- track_collection
+
+-- artist_collection
 
 INSERT OR IGNORE INTO users (username, email) VALUES ('elliot', 'elliotchance@gmail.com');
 `

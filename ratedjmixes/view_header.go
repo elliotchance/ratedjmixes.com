@@ -17,6 +17,7 @@ func viewHeader(db *sqlx.DB, w http.ResponseWriter, req *http.Request, options h
 	fmt.Fprintf(w, "<tr>\n")
 	fmt.Fprintf(w, `<td><input type="text" name="url"/></td>`)
 	fmt.Fprintf(w, `<td><input type="submit" /></td>`)
+	fmt.Fprintf(w, `<td><a href="/elliot/mixes">My Collection</a></td>`)
 	if options.TlID != "" {
 		fmt.Fprintf(w, `<td><a href="/add/%s">Add to Collection</a></td>`, options.TlID)
 	}
