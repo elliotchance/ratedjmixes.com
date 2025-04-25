@@ -7,6 +7,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+const UserID = 1 // FIXME
+
 var schema = `
 CREATE TABLE IF NOT EXISTS artist (
 	artist_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -219,4 +221,20 @@ func SetTracklistRating(db *sqlx.DB, userId, tracklistID int, rating float64) er
 	}
 
 	return nil
+}
+
+func GetUserMixes(db *sqlx.DB, userID int) ([]*Tracklist, error) {
+	var tracklists []*Tracklist
+	err := db.Select(&tracklists, `
+	SELECT tracklist.*, artist.name as artist_name
+	FROM tracklist
+	JOIN tracklist_collection USING (tracklist_id)
+	JOIN artist USING (artist_id)
+	WHERE user_id = $1`,
+		userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return tracklists, nil
 }

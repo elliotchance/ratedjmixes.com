@@ -2,7 +2,7 @@ package ratedjmixes
 
 import (
 	"bytes"
-	"os"
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -34,8 +34,18 @@ type Tracklist struct {
 	Episode  int    `db:"episode"`
 	TlID     string `db:"tl_id"`
 
-	ArtistName string
+	// Fake fields
+	ArtistName string  `db:"artist_name"`
+	Rating     float64 `db:"rating"`
 	Tracks     []*Track
+}
+
+func (m *Tracklist) RatingString() string {
+	if m.Rating == 0 {
+		return ""
+	}
+
+	return fmt.Sprintf("%.1f", m.Rating)
 }
 
 type TracklistCollection struct {
@@ -49,12 +59,7 @@ var titleRe = regexp.MustCompile(`(.*) - (.*) ([\d-]{10})`)
 var episodeRe = regexp.MustCompile(` (\d{3,})`)
 var trackRe = regexp.MustCompile(`(.*) - (.*)`)
 
-func ParseTracklist(path string, tlID string) (*Tracklist, error) {
-	dat, err := os.ReadFile(path)
-	if err != nil {
-		return nil, err
-	}
-
+func ParseTracklist(dat []byte, tlID string) (*Tracklist, error) {
 	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(dat))
 	if err != nil {
 		return nil, err
